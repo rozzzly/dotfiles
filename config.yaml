@@ -1,0 +1,36 @@
+config:
+  backup: true
+  create: true
+  dotpath: dotfiles
+dotfiles:
+  f_vimrc:
+    src: vimrc
+    dst: ~/.vimrc
+  f_zshrc:
+    src: zprezto/runcoms/zshrc
+    dst: ~/.zprezto/runcoms/zshrc
+  f_zshenv:
+    src: zprezto/runcoms/zshenv
+    dst: ~/.zprezto/runcoms/zshenv
+  f_zprofile:
+    src: zprezto/runcoms/zprofile
+    dst: ~/.zprezto/runcoms/zprofile
+  f_zpreztorc:
+    src: zprezto/runcoms/zpreztorc
+    dst: ~/.zprezto/runcoms/zpreztorc
+  f_zlogout:
+    src: zprezto/runcoms/zlogout
+    dst: ~/.zprezto/runcoms/zlogout
+  f_zlogin:
+    src: zprezto/runcoms/zlogin
+    dst: ~/.zprezto/runcoms/zlogin
+profiles:
+  rozzzly-desktop:
+    dotfiles:
+    - f_vimrc
+    - f_zshrc
+    - f_zshenv
+    - f_zprofile
+    - f_zpreztorc
+    - f_zlogout
+    - f_zlogin
