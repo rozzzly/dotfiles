@@ -24,6 +24,12 @@ dotfiles:
   f_zlogin:
     src: zprezto/runcoms/zlogin
     dst: ~/.zprezto/runcoms/zlogin
+  f_p10k.zsh:
+    src: p10k.zsh
+    dst: ~/.p10k.zsh
+  f_aliases.zsh:
+    src: aliases.zsh
+    dst: ~/.aliases.zsh
 profiles:
   rozzzly-desktop:
     dotfiles:
@@ -34,3 +40,5 @@ profiles:
     - f_zpreztorc
     - f_zlogout
     - f_zlogin
+    - f_p10k.zsh
+    - f_aliases.zsh
