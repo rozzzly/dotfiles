@@ -31,6 +31,31 @@ dotfiles:
     src: aliases.zsh
     dst: ~/.aliases.zsh
     chmod: '755'
+  f_aliases.zsh_1:
+    src: aliases.zsh
+    dst: ~/.aliases.zsh
+    chmod: '755'
+  f_readme.md:
+    src: zprezto/runcoms/README.md
+    dst: ~/.zprezto/runcoms/README.md
+  f_runcoms_zlogin:
+    src: zprezto/runcoms/zlogin
+    dst: ~/.zprezto/runcoms/zlogin
+  f_runcoms_zlogout:
+    src: zprezto/runcoms/zlogout
+    dst: ~/.zprezto/runcoms/zlogout
+  f_runcoms_zpreztorc:
+    src: zprezto/runcoms/zpreztorc
+    dst: ~/.zprezto/runcoms/zpreztorc
+  f_runcoms_zprofile:
+    src: zprezto/runcoms/zprofile
+    dst: ~/.zprezto/runcoms/zprofile
+  f_runcoms_zshenv:
+    src: zprezto/runcoms/zshenv
+    dst: ~/.zprezto/runcoms/zshenv
+  f_runcoms_zshrc:
+    src: zprezto/runcoms/zshrc
+    dst: ~/.zprezto/runcoms/zshrc
 profiles:
   rozzzly-desktop:
     dotfiles:
@@ -43,3 +68,13 @@ profiles:
     - f_zlogin
     - f_p10k.zsh
     - f_aliases.zsh
+  ROZZZLY-DESKTOP:
+    dotfiles:
+    - f_aliases.zsh_1
+    - f_readme.md
+    - f_runcoms_zlogin
+    - f_runcoms_zlogout
+    - f_runcoms_zpreztorc
+    - f_runcoms_zprofile
+    - f_runcoms_zshenv
+    - f_runcoms_zshrc

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-alias ls="ls -alhH"
+alias ls="ls -alhH --color=always | less -XF"
 
 
 # stolen from https://askubuntu.com/a/1260375
