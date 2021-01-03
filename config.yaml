@@ -30,6 +30,7 @@ dotfiles:
   f_aliases.zsh:
     src: aliases.zsh
     dst: ~/.aliases.zsh
+    chmod: '755'
 profiles:
   rozzzly-desktop:
     dotfiles:
