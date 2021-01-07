@@ -31,10 +31,6 @@ dotfiles:
     src: aliases.zsh
     dst: ~/.aliases.zsh
     chmod: '755'
-  f_aliases.zsh_1:
-    src: aliases.zsh
-    dst: ~/.aliases.zsh
-    chmod: '755'
   f_readme.md:
     src: zprezto/runcoms/README.md
     dst: ~/.zprezto/runcoms/README.md
@@ -56,9 +52,26 @@ dotfiles:
   f_runcoms_zshrc:
     src: zprezto/runcoms/zshrc
     dst: ~/.zprezto/runcoms/zshrc
+  f_dircolors:
+    src: dircolors
+    dst: ~/.dircolors
+  f_gitconfig:
+    src: gitconfig
+    dst: ~/.gitconfig
 profiles:
   rozzzly-desktop:
     dotfiles:
+  ROZZZLY-DESKTOP:
+    dotfiles:
+    - f_readme.md
+    - f_runcoms_zlogin
+    - f_runcoms_zlogout
+    - f_runcoms_zpreztorc
+    - f_runcoms_zprofile
+    - f_runcoms_zshenv
+    - f_runcoms_zshrc
+    - f_dircolors
+    - f_gitconfig
     - f_vimrc
     - f_zshrc
     - f_zshenv
@@ -68,13 +81,3 @@ profiles:
     - f_zlogin
     - f_p10k.zsh
     - f_aliases.zsh
-  ROZZZLY-DESKTOP:
-    dotfiles:
-    - f_aliases.zsh_1
-    - f_readme.md
-    - f_runcoms_zlogin
-    - f_runcoms_zlogout
-    - f_runcoms_zpreztorc
-    - f_runcoms_zprofile
-    - f_runcoms_zshenv
-    - f_runcoms_zshrc

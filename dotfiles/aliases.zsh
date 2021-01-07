@@ -1,8 +1,13 @@
 #!/usr/bin/env zsh
 
-alias ls="ls -alhH --color=always | less -XF"
+alias ls="colorls -Al --gs --color=always"
+#alias ls="ls -alhH"
 
-
+# prints swatches of all 256 ASCII colors with the following permutations for each color
+#   FG: Black   BG: <color>
+#   FG: White   BG: <color>
+#   FG: <color> BG: Black
+#   FG: <color> BG: White
 # stolen from https://askubuntu.com/a/1260375
 function printcolors() {   
     for i in {0..255} ; do

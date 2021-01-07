@@ -33,10 +33,6 @@ zinit light-mode for \
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-#
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
 
 #zinit for \
 #    light-mode  zsh-users/zsh-autosuggestions \
@@ -54,40 +50,11 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit ice from"gh-r" as"program"
 zinit load junegunn/fzf-bin
 
+zinit light marlonrichert/zsh-autocomplete
 
-#zinit light Aloxaf/fzf-tab
-#zstyle ":completion:*:git-checkout:*" sort false
-#zstyle ':completion:*:descriptions' format '[%d]'
-#zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-#zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
-
-#zinit light marlonrichert/zsh-autocomplete
-
-if [! -d ~/.pmy ] || [ ! -d ~/.pmy/rules ]; then
-    git clone https://github.com/relastle/pmy-config ~/.pmy
-fi
-
-zinit ice from"gh-r" as"program"
-zinit load relastle/pmy
-#eval "$(pmy init)"
-
-
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
-# Source Prezto.
-#if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-#  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-#fi
-
-# Customize to your needs...
+source ~/.aliases.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-source ~/.aliases.zsh
