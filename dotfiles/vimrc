@@ -4,6 +4,8 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
+set mouse=a
+
 " move .swp file somewhere they wont be an eyesore
 set directory=~/.vim/tmp,/var/tmp,/tmp
 " disable .swp file warning message

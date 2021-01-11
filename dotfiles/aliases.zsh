@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 
-alias ls="colorls -Al --gs --color=always"
-#alias ls="ls -alhH"
+#alias ls="colorls -Al --gs --color=always"
+#alias ls="ls -alHh --color=always"
+alias ls="exa -alg --icons --color=always --time-style=iso"
+alias fd="fdfind"
 
 # prints swatches of all 256 ASCII colors with the following permutations for each color
 #   FG: Black   BG: <color>

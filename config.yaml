@@ -7,23 +7,8 @@ dotfiles:
     src: vimrc
     dst: ~/.vimrc
   f_zshrc:
-    src: zprezto/runcoms/zshrc
-    dst: ~/.zprezto/runcoms/zshrc
-  f_zshenv:
-    src: zprezto/runcoms/zshenv
-    dst: ~/.zprezto/runcoms/zshenv
-  f_zprofile:
-    src: zprezto/runcoms/zprofile
-    dst: ~/.zprezto/runcoms/zprofile
-  f_zpreztorc:
-    src: zprezto/runcoms/zpreztorc
-    dst: ~/.zprezto/runcoms/zpreztorc
-  f_zlogout:
-    src: zprezto/runcoms/zlogout
-    dst: ~/.zprezto/runcoms/zlogout
-  f_zlogin:
-    src: zprezto/runcoms/zlogin
-    dst: ~/.zprezto/runcoms/zlogin
+    src: zshrc
+    dst: ~/.zshrc
   f_p10k.zsh:
     src: p10k.zsh
     dst: ~/.p10k.zsh
@@ -31,27 +16,6 @@ dotfiles:
     src: aliases.zsh
     dst: ~/.aliases.zsh
     chmod: '755'
-  f_readme.md:
-    src: zprezto/runcoms/README.md
-    dst: ~/.zprezto/runcoms/README.md
-  f_runcoms_zlogin:
-    src: zprezto/runcoms/zlogin
-    dst: ~/.zprezto/runcoms/zlogin
-  f_runcoms_zlogout:
-    src: zprezto/runcoms/zlogout
-    dst: ~/.zprezto/runcoms/zlogout
-  f_runcoms_zpreztorc:
-    src: zprezto/runcoms/zpreztorc
-    dst: ~/.zprezto/runcoms/zpreztorc
-  f_runcoms_zprofile:
-    src: zprezto/runcoms/zprofile
-    dst: ~/.zprezto/runcoms/zprofile
-  f_runcoms_zshenv:
-    src: zprezto/runcoms/zshenv
-    dst: ~/.zprezto/runcoms/zshenv
-  f_runcoms_zshrc:
-    src: zprezto/runcoms/zshrc
-    dst: ~/.zprezto/runcoms/zshrc
   f_dircolors:
     src: dircolors
     dst: ~/.dircolors
@@ -59,25 +23,10 @@ dotfiles:
     src: gitconfig
     dst: ~/.gitconfig
 profiles:
-  rozzzly-desktop:
-    dotfiles:
   ROZZZLY-DESKTOP:
     dotfiles:
-    - f_readme.md
-    - f_runcoms_zlogin
-    - f_runcoms_zlogout
-    - f_runcoms_zpreztorc
-    - f_runcoms_zprofile
-    - f_runcoms_zshenv
-    - f_runcoms_zshrc
-    - f_dircolors
     - f_gitconfig
     - f_vimrc
     - f_zshrc
-    - f_zshenv
-    - f_zprofile
-    - f_zpreztorc
-    - f_zlogout
-    - f_zlogin
     - f_p10k.zsh
     - f_aliases.zsh
