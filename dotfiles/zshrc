@@ -19,13 +19,12 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 _comp_options+=(globdots)
 
-# sharkdp/fd
-#zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd"
-#zinit light sharkdp/fd
+ 
+export GPG_TTY=$(tty)
+gpgconf --launch gpg-agent
 
 
-
-# history options
+#history options
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=200000
@@ -72,6 +71,14 @@ zinit load junegunn/fzf-bin
 #zstyle ':autocomplete:tab:*' widget-style menu-select
 #zstyle ':autocomplete:*' fzf-completion yes
 
+export LESSCHARSET=utf-8
+export NVM_SYMLINK_CURRENT="true" # nvm use should make a symlink
+export NVM_DIR="$HOME/.nvm"
+export NVM_LAZY_LOAD=true
+zinit light lukechilds/zsh-nvm
+
+zinit ice atload"zpcdreplay" atclone'./zplug.zsh'
+zinit light g-plane/zsh-yarn-autocompletions
 
 setopt auto_list
 setopt auto_menu
@@ -85,6 +92,9 @@ zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+
+zplugin light romkatv/zsh-defer
+zsh-defer source ~/wsl-startx.sh
 
 #zinit light Aloxaf/fzf-tab
 #zstyle ":completion:*:git-checkout:*" sort false

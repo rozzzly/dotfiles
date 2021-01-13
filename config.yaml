@@ -22,6 +22,21 @@ dotfiles:
   f_gitconfig:
     src: gitconfig
     dst: ~/.gitconfig
+  f_gpg-agent.conf:
+    src: gnupg/gpg-agent.conf
+    dst: ~/.gnupg/gpg-agent.conf
+    chmod: '600'
+  f_gpg.conf:
+    src: gnupg/gpg.conf
+    dst: ~/.gnupg/gpg.conf
+    chmod: '600'
+  f_wsl-startx.sh:
+    src: wsl-startx.sh
+    dst: ~/wsl-startx.sh
+    chmod: '755'
+  f_vcxsrv.xlaunch:
+    src: config/vcxsrv.xlaunch
+    dst: ~/.config/vcxsrv.xlaunch
 profiles:
   ROZZZLY-DESKTOP:
     dotfiles:
@@ -30,3 +45,7 @@ profiles:
     - f_zshrc
     - f_p10k.zsh
     - f_aliases.zsh
+    - f_gpg-agent.conf
+    - f_gpg.conf
+    - f_wsl-startx.sh
+    - f_vcxsrv.xlaunch
