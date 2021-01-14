@@ -7,6 +7,13 @@ set mouse=a
 map <RightMouse> "+gP
 " sync the system clipboard (ie: the one managed by X which in WSL comes via vcxsrv) with vim's clipboard
 set clipboard=unnamedplus
+" bind ^Up and ^Down to move lines up/down
+nnoremap <C-Up> :m .-2<CR>==
+nnoremap <C-Down> :m .+1<CR>==
+inoremap <C-Up> <Esc>:m .-2<CR>==gi
+inoremap <C-Down> <Esc>:m .+1<CR>==gi
+vnoremap <C-Up> :m '<-2<CR>gv=gvi
+vnoremap <C-Down> :m '>+1<CR>gv=gv
 
 set hlsearch
 set shiftwidth=4

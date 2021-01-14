@@ -19,20 +19,6 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 _comp_options+=(globdots)
 
- 
-export GPG_TTY=$(tty)
-gpgconf --launch gpg-agent
-
-
-#history options
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=200000
-setopt extended_history         # record timestamp of command in HISTFILE
-setopt hist_expire_dups_first   # delete duplicates first when HISTFILE size exceeds HISTSIZE
-setopt hist_ignore_dups         # ignore duplicated commands history list
-setopt inc_append_history       # dont wait for shell to exit to write history
-
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -43,49 +29,52 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# --- powerlevel10k ------------------------------------
+# zinit will install p10k automagically
+# ~/.p10k.zsh is sourced near the bottom of this file
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-zinit snippet OMZ::plugins/history/history.plugin.zsh
-zinit snippet OMZ::lib/completion.zsh
-
-
-#zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
-#    atpull'%atclone' pick"clrs.zsh" nocompile'!' \
-#    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
-#zinit light trapd00r/LS_COLORS
-
+# --- exa ----------------------------------------------
+# zinit will install exa automagically
 zinit ice lucid from"gh-r" as"program" mv"exa* -> exa"
 zinit light ogham/exa
 
-# load `fzf` fuzzy finder
+# --- fzf ----------------------------------------------
+# zinit will install fzf automagically
 zinit ice from"gh-r" as"program"
 zinit load junegunn/fzf-bin
 
-#zstyle ':completion:*' file-list list=20 insert=10
-
-#zinit light marlonrichert/zsh-autocomplete
-#zstyle ':autocomplete:*' min-input 3
-#zstyle ':autocomplete:tab:*' widget-style menu-select
-#zstyle ':autocomplete:*' fzf-completion yes
-
+# --- nvm ----------------------------------------------
+# zinit will install nvm automagically
+# specific node versions are to be installed by running ~/dotfiles/setup/nvm.sh
 export LESSCHARSET=utf-8
 export NVM_SYMLINK_CURRENT="true" # nvm use should make a symlink
 export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 zinit light lukechilds/zsh-nvm
 
+# --- yarn ---------------------------------------------
+# yarn must be installed manually via ~/dotfiles/setup/yarn.zsh
 zinit ice atload"zpcdreplay" atclone'./zplug.zsh'
 zinit light g-plane/zsh-yarn-autocompletions
 
+# --- Completion Options ---------------------------------
+zinit snippet OMZ::plugins/history/history.plugin.zsh
+zinit snippet OMZ::lib/completion.zsh
+# Automatically list choices on an ambiguous completion
 setopt auto_list
-setopt auto_menu
+# single tab will put cursor right into completion menu for ambigious matches
+setopt menu_complete
+# after  completion is done, move to end of line
 setopt always_to_end
+# If unset, the cursor is set to the end of the word if completion is started. Otherwise it stays there and completion is done from both ends.
 setopt complete_in_word
+# If this option is unset, output flow control (usually assigned to ^S/^Q) is disabled in the shell’s editor
+# does not appear to have any effect :/ 
 unsetopt flow_control
-#unsetopt menu_complete
+#setopt auto_menu
+
+# --- Completion UI Customization -------------------------
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion::complete:*' use-cache 1
@@ -93,35 +82,76 @@ zstyle ':completion::complete:*' cache-path
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
-zplugin light romkatv/zsh-defer
+# --- History Options -------------------------------------
+# history file location
+HISTFILE=~/.zsh_history
+# max number of commands to save in memory
+HISTSIZE=10000
+# max number of commands to save to disk
+SAVEHIST=200000
+# record timestamp of command in HISTFILE
+setopt extended_history 
+# delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_expire_dups_first
+# ignore duplicated commands history list
+setopt hist_ignore_dups
+# dont wait for shell to exit to write history
+setopt inc_append_history
+
+# --- history search via up/down keys ---------------------
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "$terminfo[kcuu1]" up-line-or-beginning-search
+bindkey "$terminfo[kcud1]" down-line-or-beginning-search
+
+# --- vcxsrv ----------------------------------------------
+# in WSL, vcxsrv is used to ensure that xclip works which
+# is needed for the system (Windows) clipboard to sync with 
+zplugin light romkatv/zsh-defer # allow us to defer the execution a moment because this can pause for 2-3 sec
 zsh-defer source ~/wsl-startx.sh
-
-#zinit light Aloxaf/fzf-tab
-#zstyle ":completion:*:git-checkout:*" sort false
-#zstyle ':completion:*:descriptions' format '[%d]'
-#zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-#zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -alg --icons --color=always --time-style=iso $realpath'
-
 
 zinit for \
     light-mode  zsh-users/zsh-autosuggestions \
     light-mode  zdharma/fast-syntax-highlighting \
-                zdharma/history-search-multi-word \
+                zdharma/history-search-multi-word
+# --- history-search-multi-word ---------------------------
+# dedicated history search with widget not unlike fzf
+# bound to ^R
 
+# Number of entries to show (default is $LINES/3)
+zstyle ":history-search-multi-word" page-size "8"
+# Color in which to highlight matched, searched text (default bg=17 on 256-color terminals)
+zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"   
+# Whether to perform syntax highlighting (default true)
+zstyle ":plugin:history-search-multi-word" synhl "yes" 
+# Effect on active history entry. Try: standout, bold, bg=blue (default underline)
+zstyle ":plugin:history-search-multi-word" active "underline"        
+# Whether to check paths for existence and mark with magenta (default true)
+zstyle ":plugin:history-search-multi-word" check-paths "yes"
+# Whether pressing Ctrl-C or ESC should clear entered query
+zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"
 
-zstyle ":history-search-multi-word" page-size "8"                      # Number of entries to show (default is $LINES/3)
-zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"   # Color in which to highlight matched, searched text (default bg=17 on 256-color terminals)
-zstyle ":plugin:history-search-multi-word" synhl "yes"                 # Whether to perform syntax highlighting (default true)
-zstyle ":plugin:history-search-multi-word" active "underline"          # Effect on active history entry. Try: standout, bold, bg=blue (default underline)
-zstyle ":plugin:history-search-multi-word" check-paths "yes"           # Whether to check paths for existence and mark with magenta (default true)
-zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"        # Whether pressing Ctrl-C or ESC should clear entered query
-
+# ---------------------------------------------------------
+# fix ctrl + right and ctrl + left which got messed up somehow
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
+# ---------------------------------------------------------
 test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
+# --- Aliases ---------------------------------------------
 source ~/.aliases.zsh
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# --- GPG -------------------------------------------------
+export GPG_TTY=$(tty)
+gpgconf --launch gpg-agent
+
+# --- Quick Environmental Stuff ---------------------------
+export VISUAL="vim"
+export EDITOR="$VISUAL"
+
+# ---------------------------------------------------------
+# Load customized p10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
