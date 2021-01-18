@@ -37,6 +37,9 @@ dotfiles:
   f_vcxsrv.xlaunch:
     src: config/vcxsrv.xlaunch
     dst: ~/.config/vcxsrv.xlaunch
+  f_patched-airline-ayu_mirage.vim:
+    src: vim/patched-airline-ayu_mirage.vim
+    dst: ~/.vim/patched-airline-ayu_mirage.vim
 profiles:
   ROZZZLY-DESKTOP:
     dotfiles:
@@ -49,3 +52,4 @@ profiles:
     - f_gpg.conf
     - f_wsl-startx.sh
     - f_vcxsrv.xlaunch
+    - f_patched-airline-ayu_mirage.vim

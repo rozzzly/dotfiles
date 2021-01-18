@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# shellcheck source=util.sh
 source ~/dotfiles/setup/util.sh
 
 echo ""
