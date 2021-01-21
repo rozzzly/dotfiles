@@ -25,19 +25,35 @@ BG_White='\033[47m'
 # Log tags
 PRETTY_Info="${FG_Cyan}${PRETTY_Invert} < Info > ${PRETTY_Reset}"
 PRINTY_Info () {
-    echo -e "${PRETTY_Info} ${FG_Cyan}$1${PRETTY_Reset}"
+    if [ -z "$2" ]; then
+        echo -e "${PRETTY_Info} ${FG_Cyan}$1${PRETTY_Reset}"
+    else
+        echo -e "${PRETTY_Info} ${FG_Cyan}${1//@/$FG_Purple$2$FG_Cyan}${PRETTY_Reset}"
+    fi
 }
 PRETTY_Okay="${FG_Green}${PRETTY_Invert} < Okay > ${PRETTY_Reset}"
 PRINTY_Okay () {
-    echo -e "${PRETTY_Okay} ${FG_Green}$1${PRETTY_Reset}"
+    if [ -z "$2" ]; then
+        echo -e "${PRETTY_Okay} ${FG_Green}$1${PRETTY_Reset}"
+    else
+        echo -e "${PRETTY_Okay} ${FG_Green}${1//@/$FG_Purple$2$FG_Green}${PRETTY_Reset}"
+    fi
 }
 PRETTY_Fail="${FG_Red}${PRETTY_Invert} < Fail > ${PRETTY_Reset}"
 PRINTY_Fail () {
-    echo -e "${PRETTY_Fail} ${FG_Red}$1${PRETTY_Reset}"
+    if [ -z "$2" ]; then
+        echo -e "${PRETTY_Fail} ${FG_Red}$1${PRETTY_Reset}"
+    else
+        echo -e "${PRETTY_Fail} ${FG_Red}${1//@/$FG_Purple$2$FG_Red}${PRETTY_Reset}"
+    fi
 }
 PRETTY_Warn="${FG_Yellow}${PRETTY_Invert} < Warn > ${PRETTY_Reset}"
 PRINTY_Warn () {
-    echo -e "${PRETTY_Warn} ${FG_Yellow}$1${PRETTY_Reset}"
+    if [ -z "$2" ]; then
+        echo -e "${PRETTY_Warn} ${FG_Yellow}$1${PRETTY_Reset}"
+    else
+        echo -e "${PRETTY_Warn} ${FG_Yellow}${1//@/$FG_Purple$2$FG_Yellow}${PRETTY_Reset}"
+    fi
 }
 
 # for comparing semvers 

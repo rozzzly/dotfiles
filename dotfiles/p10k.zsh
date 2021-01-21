@@ -20,6 +20,7 @@
 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
 () {
+
   emulate -L zsh -o extended_glob
 
   # Unset all configuration options. This allows you to apply configuration changes without
@@ -210,21 +211,21 @@
 
   ##################################[ dir: current directory ]##################################
   # Current directory background color.
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND=117
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND=$(hexcolor 117 '#399ee6')
   # Default current directory foreground color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=26
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=$(hexcolor 0 '#141925')
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   # Replace removed segment suffixes with this symbol.
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=246
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=$POWERLEVEL9K_DIR_FOREGROUND
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=26
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=$POWERLEVEL9K_DIR_FOREGROUND
   # Display anchor directory segments in bold.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=false
   # Don't shorten directories that contain any of these files. They are anchors.
   local anchor_files=(
     .bzr
@@ -887,8 +888,9 @@
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=3
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=0
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=0
-  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=38
+
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=$(hexcolor 0 '#d3d6d8')
+  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=$(hexcolor 38 '#0f4e7b')
 
   # Context format when running with privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n'
@@ -1592,8 +1594,8 @@
 
   ####################################[ time: current time ]####################################
   # Current time color.
-  # typeset -g POWERLEVEL9K_TIME_FOREGROUND=0
-  # typeset -g POWERLEVEL9K_TIME_BACKGROUND=7
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=$(hexcolor 0 '#82420b')
+  typeset -g POWERLEVEL9K_TIME_BACKGROUND=$(hexcolor 229 '#ffe6b3')
   # Format for the current time: 09:51:02. See `man 3 strftime`.
   typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%I:%M:%S %p}'
   # If set to true, time will update when you hit enter. This way prompts for the past

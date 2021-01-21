@@ -40,6 +40,9 @@ dotfiles:
   f_patched-airline-ayu_mirage.vim:
     src: vim/patched-airline-ayu_mirage.vim
     dst: ~/.vim/patched-airline-ayu_mirage.vim
+  f_zshenv:
+    src: zshenv
+    dst: ~/.zshenv
 profiles:
   ROZZZLY-DESKTOP:
     dotfiles:
@@ -53,3 +56,4 @@ profiles:
     - f_wsl-startx.sh
     - f_vcxsrv.xlaunch
     - f_patched-airline-ayu_mirage.vim
+    - f_zshenv

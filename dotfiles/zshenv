@@ -1,0 +1,18 @@
+source "$HOME/.cargo/env"
+
+# --- Common Environmental Stuff ---------------------------
+export VISUAL="vim"
+export EDITOR="$VISUAL"
+export PAGER="less"
+
+#  prsense of WT_SESSION indicates this is Windows Terminal
+# @see https://github.com/microsoft/terminal/issues/1040#issuecomment-496713912
+if [[ ! -z $WT_SESSION ]]; then
+    # then force truecolor (rgb) support
+    export COLORTERM="truecolor"
+fi
+
+
+if [[ "$(uname -a | grep -e '[Mm]icrosoft')" ]]; then
+    export IS_WSL=true
+fi

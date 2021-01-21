@@ -1,49 +1,55 @@
 #!/usr/bin/env bash
 
+# shellcheck source=util.sh
 source ~/dotfiles/setup/util.sh
 
 echo ""
-
-if command exa &> /dev/null; then
-    PRINTY_Okay "${FG_Purple}exa${FG_Green} is already installed"
-    echo ""
-    exit 0
+UPDATE_ONLY=false
+# see if it is already installed
+if command -v exa &> /dev/null; then
+    PRINTY_Warn "@ is already installed" "exa"
+    PRINTY_Info "updating to latest version of @" "exa"
+    UPDATE_ONLY=true
+else
+    PRINTY_Info "installing @" "exa"
 fi
 
-PRINTY_Info "Installing ${FG_Purple}exa${FG_Cyan}"
+if ! command -v cargo &> /dev/null; then
+    PRINTY_Warn "@ is not installed" "rust"
+    PRINTY_Info "installing @" "rust"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    INSTALL_EXITCODE=$?
+    echo ""
 
-sudo apt-get update
-sudo apt-get install exa
-install_exitcode=$?
+    if [ $INSTALL_EXITCODE -eq 0 ] && command -v cargo &> /dev/null; then
+        PRINTY_Okay "installed @ successfully" "rust"
+        echo ""
+    else 
+        PRINTY_Fail "failed to install @" "rust"
+        echo ""
+        exit 1
+    fi
+fi
 
+
+cargo install exa
+INSTALL_EXITCODE=$?
 echo ""
 
-if [ $install_exitcode -eq 0 ]; then
-    PRINTY_Okay "${FG_Purple}exa${FG_Green} installed successfully"
+if [ $INSTALL_EXITCODE -eq 0 ] && command -V exa &> /dev/null; then
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "updated to latest version of @ successfully" "exa"
+    else
+        PRINTY_Okay "installed @ successfully" "exa"
+    fi
     echo ""
     exit 0
-else
-    PRINTY_Fail "failed to install ${FG_Purple}exa${FG_Red}"
-    source /etc/os-release
-#    if (( $(echo "$VERSION_ID == 20.04" | bc -l) )); then
-    if ( version_compare "$VERSION_ID" "<" "20.10" ); then
-        PRINTY_Warn "${FG_Purple}exa${FG_Yellow} is not officially availiable until 20.10. Will attempt to install from .deb manually..."
-        tmp_dir=$(mktemp -d -t exa-install-XXXXXXXXXX)
-        wget -P "${tmp_dir}" http://archive.ubuntu.com/ubuntu/pool/universe/r/rust-exa/exa_0.9.0-4_amd64.deb
-        sudo apt-get install "${tmp_dir}/exa_0.9.0-4_amd64.deb"
-        install_exitcode=$?
-        echo ""
-        if [ $install_exitcode -eq 0 ]; then
-            PRINTY_Okay "${FG_Purple}exa${FG_Green} installed successfully"
-            echo ""
-            exit 0
-        else
-            PRINTY_Fail "failed to ${FG_Purple}exa${FG_RED}... not sure why. figure it out yourself!"
-            echo ""
-            exit 1
-        fi
+else 
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "failed to update to latest version of @" "exa"
     else
-        exit 1
-    fi 
+        PRINTY_Okay "failed to install @" "exa"
+    fi
+    echo ""
+    exit 1
 fi
-

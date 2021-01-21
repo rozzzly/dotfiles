@@ -4,56 +4,52 @@
 source ~/dotfiles/setup/util.sh
 
 echo ""
-
-BINNAME="${FG_Purple}lsd"
-
+UPDATE_ONLY=false
 # see if it is already installed
 if command -v lsd &> /dev/null; then
-    PRINTY_Okay "${BINNAME}${FG_Green} is already installed"
+    PRINTY_Warn "@ is already installed" "lsd"
+    PRINTY_Info "updating to latest version of @" "lsd"
+    UPDATE_ONLY=true
+else
+    PRINTY_Info "installing @" "lsd"
+fi
+
+if ! command -v cargo &> /dev/null; then
+    PRINTY_Warn "@ is not installed" "rust"
+    PRINTY_Info "installing @" "rust"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    INSTALL_EXITCODE=$?
     echo ""
-    PRINTY_Info "Ensuring ${BINNAME}${FG_Cyan} is up to date"
-    cargo install lsd
-    install_exitcode=$?
-   
-    echo ""
-    if [ $install_exitcode -eq 0 ] && command -v lsd &> /dev/null; then
-        PRINTY_Okay "latest version of ${BINNAME}${FG_Green} installed successfully"
+
+    if [ $INSTALL_EXITCODE -eq 0 ] && command -v cargo &> /dev/null; then
+        PRINTY_Okay "installed @ successfully" "rust"
         echo ""
-        exit 0
     else 
-        PRINTY_Fail "failed to install latest version of ${BINNAME}${FG_Red}"
+        PRINTY_Fail "failed to install @" "rust"
         echo ""
         exit 1
     fi
 fi
 
-if ! command -v cargo &> /dev/null; then
-    PRINTY_Warn "${FG_Purple}rust${FG_Yellow} is not installed"
-    PRINTY_Info "Installing ${FG_Purple}rust${FG_Cyan}"
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    install_exitcode=$?
-    echo ""
 
-    if [ $install_exitcode -eq 0 ] && command -v cargo &> /dev/null; then
-        PRINTY_Okay "${FG_Purple}rust${FG_Green} installed successfully"
-        echo ""
-    else 
-        PRINTY_Fail "failed to install ${FG_Purple}rust${FG_Red}"
-        echo ""
-    fi
-fi
-
-PRINTY_Info "installing ${BINNAME}${FG_Cyan}"
 cargo install lsd
-install_exitcode=$?
-
+INSTALL_EXITCODE=$?
 echo ""
-if [ $install_exitcode -eq 0 ] && command -v lsd &> /dev/null; then
-    PRINTY_Okay "${BINNAME}${FG_Green} installed successfully"
+
+if [ $INSTALL_EXITCODE -eq 0 ] && command -V lsd &> /dev/null; then
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "updated to latest version of @ successfully" "lsd"
+    else
+        PRINTY_Okay "installed @ successfully" "lsd"
+    fi
     echo ""
     exit 0
 else 
-    PRINTY_Fail "failed to install ${BINNAME}${FG_Red}"
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "failed to update to latest version of @" "lsd"
+    else
+        PRINTY_Okay "failed to install @" "lsd"
+    fi
     echo ""
     exit 1
 fi

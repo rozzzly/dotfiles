@@ -1,30 +1,46 @@
 #!/usr/bin/env bash
 
+echo ""
+
 # shellcheck source=util.sh
 source ~/dotfiles/setup/util.sh
 
-echo ""
-
+UPDATE_ONLY=false
 # see if it is already installed
-if command -v fdfind &> /dev/null; then
-    PRINTY_Okay "${FG_Purple}fd-find${FG_Green} is already installed"
+if command -v svn &> /dev/null; then
+    PRINTY_Warn "@ is already installed" "fd-find"
+    PRINTY_Info "updating to latest version of @" "fd-find"
+    UPDATE_ONLY=true
+else
+    PRINTY_Info "installing @" "fd-find"
+fi
+sudo apt-get update
+INSTALL_EXITCODE=$?
+if [ $INSTALL_EXITCODE -ne 0 ]; then
     echo ""
-    exit 0
+    PRINTY_Fail "failed to resynchronize the package index"
+    echo ""
+    exit 1
 fi
 
-PRINTY_Info "installing ${FG_Purple}fd-find${FG_Cyan}"
-sudo apt-get update
 sudo apt-get install fd-find
-install_exitcode=$?
-
+INSTALL_EXITCODE=$?
 echo ""
 
-if [ $install_exitcode -eq 0 ]; then
-    PRINTY_Okay "${FG_Purple}fd-find${FG_Green} installed successfully"
+if [ $INSTALL_EXITCODE -eq 0 ] && command -V svn &> /dev/null; then
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "updated to latest version of @ successfully" "fd-find"
+    else
+        PRINTY_Okay "installed @ successfully" "fd-find"
+    fi
     echo ""
     exit 0
 else 
-    PRINTY_Fail "failed to install ${FG_Purple}fd-find${FG_Red}"
+    if [ "$UPDATE_ONLY" = true ]; then
+        PRINTY_Okay "failed to update to latest version of @" "fd-find"
+    else
+        PRINTY_Okay "failed to install @" "fd-find"
+    fi
     echo ""
     exit 1
 fi

@@ -1,9 +1,13 @@
 #!/usr/bin/env zsh
 
-#alias ls="colorls -Al --gs --color=always"
-#alias ls="ls -alHh --color=always"
-alias ls="exa -alg --icons --color=always --time-style=iso"
+alias ls="lsd -lA --color=always --date +\"%m/%d/%y %H:%M\""
 alias fd="fdfind"
+alias less="less -r"
+
+function hexcolor() {
+  if [ "$COLORTERM" = "truecolor" ]; then; echo "$2"; else; echo "$1"; fi
+}
+
 
 # prints swatches of all 256 ASCII colors with the following permutations for each color
 #   FG: Black   BG: <color>
@@ -11,7 +15,7 @@ alias fd="fdfind"
 #   FG: <color> BG: Black
 #   FG: <color> BG: White
 # stolen from https://askubuntu.com/a/1260375
-function printcolors() {   
+function printcolors() {
     for i in {0..255} ; do
         # Black FG on color BG
         printf "\e[30;48;5;%sm%4d " "$i" "$i"
