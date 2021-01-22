@@ -5,7 +5,7 @@ alias fd="fdfind"
 alias less="less -r"
 
 function hexcolor() {
-  if [ "$COLORTERM" = "truecolor" ]; then; echo "$2"; else; echo "$1"; fi
+    if [ "$COLORTERM" = "truecolor" ]; then; echo "$2"; else; echo "$1"; fi
 }
 
 
