@@ -51,6 +51,10 @@ dotfiles:
     src: ssh/config
     dst: ~/.ssh/config
     chmod: '755'
+  f_hide-shame:
+    src: bin/hide-shame
+    dst: ~/bin/hide-shame
+    chmod: '755'
 profiles:
   ROZZZLY-DESKTOP:
     dotfiles:
@@ -67,3 +71,4 @@ profiles:
     - f_zshenv
     - f_git-redate
     - f_config
+    - f_hide-shame

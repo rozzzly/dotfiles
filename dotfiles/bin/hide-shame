@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+
+/////// HOW TO USE
+//// this will have to be tailored to each rewrite, but process will look something like:
+//
+// cd my_project root
+//
+// git rewrite-all-history
+//
+//// this will bring up and editor, after each line starting with "pick" add the following two lines:
+//  exec find ./test -name '*.ts' -exec hide-shame {} \;
+//  exec yarn run eslint --fix --ext .js,.ts --ignore-pattern './node_modules' .
+// 
+//// for each pitstop git pauses at, do the following but only stage! do not commit
+//  (if merge) accept any incoming changes
+//  stage any changes 
+// 
+//// then run:
+//  [ ! -f ./.git/MERGE_MSG ] && git commit --amend --no-edit ; git rebase --continue
+//
+//// which will advance to the next commit/conflict
+//// keep going until you're done. 
+//
+//// to fix changed timestamps / missing GPG keys, run
+// git sign-and-mirror
+//
+//
+
+const filePath = process.argv[2];
+
+const fs = require('fs-extra');
+
+const matchRegExp = /(test\(oneLine\`\n\s*(.*?)\n`\s*,\s*\(\s*\))/gm;
+const escapedQuoteRegExp = /(?<!\\)'/g;
+
+process.on('uncaughtException', error => {
+    console.error(error);
+    process.exit(1);
+});
+process.on('unhandledRejection', error => {
+    console.error(error);
+    process.exit(1);
+});
+
+
+(async () => {
+    const fileContent = (await fs.readFile(filePath)).toString();
+    const parts = [];
+    let lastMatch = 0;
+    let match;
+    let wasChanged = false;
+    while (match = matchRegExp.exec(fileContent)) {
+        wasChanged = true;
+        if (match.index !== lastMatch) {
+            parts.push(fileContent.slice(lastMatch, match.index));
+        }
+
+        if (escapedQuoteRegExp.test(match[2])) {
+            escapedQuoteRegExp.lastIndex = -1; // reset so we can use again
+            parts.push(`test(\`${match[2].replace(/(?<!\\)`/g, '`')}\`, ()`);
+        } else {
+            parts.push(`test('${match[2]}', ()`);
+        }
+
+        lastMatch = match.index + match[1].length;
+    }
+    if (lastMatch !== fileContent.length) {
+        parts.push(fileContent.slice(lastMatch));
+    }
+    if (wasChanged) {
+        await fs.writeFile(filePath, parts.join(''));
+        process.exit(0);
+    } else {
+        process.exit(0);
+    }
+})();
