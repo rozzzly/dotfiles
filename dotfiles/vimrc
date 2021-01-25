@@ -51,6 +51,7 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 call plug#begin()
 Plug 'preservim/nerdcommenter'
 Plug 'terryma/vim-expand-region'
+Plug 'farmergreg/vim-lastplace'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ayu-theme/ayu-vim'
@@ -73,5 +74,5 @@ syntax on
 let ayucolor="mirage"
 colorscheme ayu
 
-" don't set the bacground for the normal windows (use the termial's bg)
+" don't set the bacground for entire window (ie: the termial's bg)
 hi Normal guibg=NONE ctermbg=NONE

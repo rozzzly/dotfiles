@@ -5,13 +5,17 @@ export VISUAL="vim"
 export EDITOR="$VISUAL"
 export PAGER="less"
 
-#  prsense of WT_SESSION indicates this is Windows Terminal
+# --- Add custom script dir to PATH -----------------------
+if [ -d "$HOME/bin" ]; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# presense of WT_SESSION indicates this is Windows Terminal
 # @see https://github.com/microsoft/terminal/issues/1040#issuecomment-496713912
 if [[ ! -z $WT_SESSION ]]; then
     # then force truecolor (rgb) support
     export COLORTERM="truecolor"
 fi
-
 
 if [[ "$(uname -a | grep -e '[Mm]icrosoft')" ]]; then
     export IS_WSL=true

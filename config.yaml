@@ -43,6 +43,14 @@ dotfiles:
   f_zshenv:
     src: zshenv
     dst: ~/.zshenv
+  f_git-redate:
+    src: bin/git-redate
+    dst: ~/bin/git-redate
+    chmod: '755'
+  f_config:
+    src: ssh/config
+    dst: ~/.ssh/config
+    chmod: '755'
 profiles:
   ROZZZLY-DESKTOP:
     dotfiles:
@@ -57,3 +65,5 @@ profiles:
     - f_vcxsrv.xlaunch
     - f_patched-airline-ayu_mirage.vim
     - f_zshenv
+    - f_git-redate
+    - f_config

@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+# based on
+# https://github.com/t0r0X/git-redate
+# https://github.com/PotatoLabs/git-redate
+
+is_git_repo() {
+    git rev-parse --show-toplevel > /dev/null 2>&1
+    result=$?
+    if test $result != 0; then
+        >&2 echo 'Not a git repo!'
+        exit $result
+  fi
+}
+
+is_git_repo
+ALL=0
+MIRROR=0
+SIGN=0
+while [[ $# -ge 1 ]]; do
+    case "$1" in
+        --all)
+            shift
+            ALL=1
+            ;;
+        -m|--mirror)
+            shift
+            MIRROR=1
+            ;;
+        -s|--sign)
+            shift
+            SIGN=1
+            ;;
+        -c| --commits)
+            shift
+            if [[ "$1" =~ ^[1-9][0-9]*$ ]]; then COMMITS=$1; shift; else echo "ERROR: invalid commits count: '$1'"; exit 2; fi
+            ;;
+        *)
+            echo "Unknown param '${1}'"
+            exit 1
+            ;;
+    esac
+done
+
+echo "DEBUG: ALL = $ALL"
+echo "DEBUG: MIRROR = $MIRROR"
+echo "DEBUG: SIGN = $SIGN"
+echo "DEBUG: COMMITS = $COMMITS"
+
+die () {
+    echo >&2 `basename $0`: $*
+    exit 1
+}
+
+tmpfile=$(mktemp gitblah-XXXX)
+[ -f "$tmpfile" ] || die "could not get tmpfile=[$tmpfile]"
+trap "rm -f $tmpfile" EXIT
+
+
+datefmt=%cI
+if [ "`git log -n1  --pretty=format:"$datefmt"`" == "$datefmt" ];
+then
+    datefmt=%ci
+fi
+
+if [ -n "${COMMITS+set}" ];
+then git log -n $COMMITS --pretty=format:"$datefmt | %H | %s" > $tmpfile;
+else 
+    if [ -n "${ALL+set}" ]; then
+        git log --pretty=format:"$datefmt | %H | %s" > $tmpfile;
+    else
+        git log -n 5 --pretty=format:"$datefmt | %H | %s" > $tmpfile;
+    fi
+fi
+
+
+if [ "${MIRROR}" -eq 1 ] ; then
+    ENVFILTER="export GIT_COMMITTER_DATE=\"\$GIT_AUTHOR_DATE\";";
+else
+    ${VISUAL:-${EDITOR:-vi}} $tmpfile
+    ENVFILTER=""
+    while read commit; do
+        IFS="|" read date hash message <<< "$commit"
+        if [ "$datefmt" == "%cI" ]
+        then
+            DATE_NO_SPACE="$(echo "${date}" | tr -d '[[:space:]]')"
+        else
+            DATE_NO_SPACE="$(echo "${date}")"
+        fi
+        COMMIT_ENV=$(cat <<-END
+if [ \$GIT_COMMIT = $hash ]; then
+    export GIT_AUTHOR_DATE="$DATE_NO_SPACE"
+    export GIT_COMMITTER_DATE="$DATE_NO_SPACE";
+fi;
+END
+)
+        ENVFILTER="$ENVFILTER$COMMIT_ENV"
+    done < $tmpfile
+fi
+
+if [ "${ALL}" -eq 1 ] ; then
+    if [ "${SIGN}" -eq 1 ] ; then
+        git filter-branch -f --env-filter "$ENVFILTER" --commit-filter 'git commit-tree -S "$@";' -- --all >/dev/null
+    else
+        git filter-branch -f --env-filter "$ENVFILTER" -- --all >/dev/null
+    fi
+else
+    git filter-branch -f --env-filter "$ENVFILTER" HEAD~${COMMITS}..HEAD >/dev/null
+fi
+
+if [ $? = 0 ] ; then
+    echo "redating successful"
+    echo "Git commit dates updated. Run 'git push -f BRANCH_NAME' to push your changes."
+else
+    echo "Git redate failed. Please make sure you run this on a clean working directory."
+fi
+
+
+
