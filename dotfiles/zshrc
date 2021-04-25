@@ -114,10 +114,13 @@ fi
 
 # --- more completion stuff -------------------------------
 
-zinit for \
-    light-mode  zsh-users/zsh-autosuggestions \
-    light-mode  zdharma/history-search-multi-word
+#zinit for \
+#    light-mode  zsh-users/zsh-autosuggestions \
+#    light-mode  zdharma/history-search-multi-word
 
+# --- fzf-fasd fuzzy completion --------------------------
+eval "$(fasd --init auto)"
+bindkey '^T' fasd-complete
 # --- Syntax Highlighting ---------------------------------
 
 zplugin ice lucid wait"1" atload"set_fast_theme"
@@ -150,6 +153,7 @@ zstyle ":plugin:history-search-multi-word" active "underline"
 zstyle ":plugin:history-search-multi-word" check-paths "yes"
 # Whether pressing Ctrl-C or ESC should clear entered query
 zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"
+
 
 # -- Misc. Key Bindings -----------------------------------
 # fix ctrl + right and ctrl + left which got messed up somehow

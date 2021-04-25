@@ -56,7 +56,31 @@ PRINTY_Warn () {
     fi
 }
 
-# for comparing semvers 
+has_ppa() {
+    grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v '#' | grep "$1" > /dev/null
+    return "$?"
+}
+
+is_mac() {
+    uname | grep -q -i 'darwin'
+    return "$?"
+}
+
+is_debian_based() {
+    if [ -f "/etc/debian_version" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_wsl() {
+    uname -a | grep -q -e '[Mm]icrosoft'
+    return "$?"
+}
+
+
+# for comparing semvers
 # stolen from https://stackoverflow.com/a/65048470
 version_compare() {
     _largest_version "$1" "$3"; _cmp="$(printf '%s' "$?")"
