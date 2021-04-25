@@ -10,13 +10,13 @@
 //// this will bring up and editor, after each line starting with "pick" add the following two lines:
 //  exec find ./test -name '*.ts' -exec hide-shame {} \;
 //  exec yarn run eslint --fix --ext .js,.ts --ignore-pattern './node_modules' .
-// 
+//
 //// for each pitstop git pauses at, do the following but only stage! do not commit
 //  (if merge) accept any incoming changes
 //  stage any changes 
 // 
 //// then run:
-//  [ ! -f ./.git/MERGE_MSG ] && git commit --amend --no-edit ; git rebase --continue
+//  [ ! -f ./.git/MERGE_MSG ] && git commit --amend '-S' --no-edit ; git rebase --continue
 //
 //// which will advance to the next commit/conflict
 //// keep going until you're done. 

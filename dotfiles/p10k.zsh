@@ -111,6 +111,10 @@
     # example               # example user-defined segment (see prompt_example function below)
   )
 
+  # fix extra space to right of right prompt segment
+  # @see https://github.com/romkatv/powerlevel10k/issues/68#issuecomment-492010264
+  export ZLE_RPROMPT_INDENT=0
+
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
   typeset -g POWERLEVEL9K_MODE=nerdfont-complete
   # When set to `moderate`, some icons will have an extra space after them. This is meant to avoid
@@ -211,9 +215,11 @@
 
   ##################################[ dir: current directory ]##################################
   # Current directory background color.
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND=$(hexcolor 117 '#399ee6')
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND=$(hexcolor 31 '#2976a2')
+  #typeset -g POWERLEVEL9K_DIR_BACKGROUND=$(hexcolor 117 '#399ee6')
   # Default current directory foreground color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=$(hexcolor 0 '#141925')
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=$(hexcolor 232 '#000000')
+  #typeset -g POWERLEVEL9K_DIR_FOREGROUND=$(hexcolor 0 '#d3d6d8')
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
@@ -350,10 +356,12 @@
 
   #####################################[ vcs: git status ]######################################
   # Version control system colors.
-  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=$(hexcolor 42 '#91da5a')
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=$(hexcolor 216 '#fdd78c')
-  # typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=2
-  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=$(hexcolor 216 '#fdd78c')
+  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=$(hexcolor 112 '#91da5a')
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=$(hexcolor 11 '#fdd78c')
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=$(hexcolor 11 '#fdd78c')
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=$(hexcolor 174 '#d78787')
+  # only affects github logo not rest of text
+  typeset -g POWERLEVEL9K_VCS_{CLEAN,MODIFIED,UNTRACKED,CONFLICTED}_FOREGROUND=$(hexcolor 232 '#000000')
   # typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=8
 
   # Branch icon. Set this parameter to '\uF126 ' for the popular Powerline branch icon.
@@ -381,12 +389,12 @@
       return
     fi
 
-    # Styling for different parts of Git status.
-    local       meta='%7F' # white foreground
-    local      clean='%0F' # black foreground
-    local   modified='%0F' # black foreground
-    local  untracked='%0F' # black foreground
-    local conflicted='%1F' # red foreground
+    # Styling for different parts of Git status. Have to manually escape foreground color, hence the %F{...}
+    local       meta=$(hexcolor '%F{232}' '%F{#000000}')
+    local      clean=$(hexcolor '%F{232}' '%F{#000000}')
+    local   modified=$(hexcolor '%F{232}' '%F{#000000}')
+    local  untracked=$(hexcolor '%F{232}' '%F{#000000}')
+    local conflicted=$(hexcolor '%F{232}' '%F{#000000}')
 
     local res
     local where  # branch or tag
@@ -425,7 +433,7 @@
     # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
     (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
     # *42 if have stashes.
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}${VCS_STATUS_STASHES}"
+    (( VCS_STATUS_STASHES        )) && res+=" ${clean} ${VCS_STATUS_STASHES}"
     # 'merge' if the repo is in an unusual state.
     [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
     # ~42 if have merge conflicts.
@@ -433,11 +441,11 @@
     # +42 if have staged changes.
     (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}${VCS_STATUS_NUM_STAGED}"
     # !42 if have unstaged changes.
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}${VCS_STATUS_NUM_UNSTAGED}"
+    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified} ${VCS_STATUS_NUM_UNSTAGED}"
     # ?42 if have untracked files. It's really a question mark, your font isn't broken.
     # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
     # Remove the next line if you don't want to see untracked files at all.
-    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
+    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON} ${VCS_STATUS_NUM_UNTRACKED}"
     # "─" if the number of unstaged files is unknown. This can happen due to
     # POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY (see below) being set to a non-negative number lower
     # than the number of files in the Git index, or due to bash.showDirtyState being set to false
@@ -882,8 +890,8 @@
 
   ##################################[ context: user@hostname ]##################################
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=$(hexcolor 0 '#d3d6d8')
-  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=$(hexcolor 38 '#0f4e7b')
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=$(hexcolor 255 '#d3d6d8')
+  typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=$(hexcolor 24 '#0f4e7b')
   # Context colors for other states
   typeset -g POWERLEVEL9K_CONTEXT_{ROOT,REMOTE,REMOTE_SUDO}_FOREGROUND=$POWERLEVEL9K_CONTEXT_FOREGROUND
   typeset -g POWERLEVEL9K_CONTEXT_{ROOT,REMOTE,REMOTE_SUDO}_BACKGROUND=$POWERLEVEL9K_CONTEXT_BACKGROUND
