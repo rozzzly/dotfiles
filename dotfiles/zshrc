@@ -109,7 +109,7 @@ bindkey "$terminfo[kcud1]" down-line-or-beginning-search
 # is needed for the system (Windows) clipboard to sync with
 if [ ! -z $IS_WSL ]; then
     zplugin light romkatv/zsh-defer # allow us to defer the execution a moment because this can pause for 2-3 sec
-    zsh-defer source ~/wsl-startx.sh
+    zsh-defer -1 . ~/wsl-startx.sh
 fi
 
 # --- more completion stuff -------------------------------

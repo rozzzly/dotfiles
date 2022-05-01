@@ -4,16 +4,17 @@
 	signingkey = 0D77279A27EC5998
 [core]
 	editor = vim
+	eol = lf
 [alias]
 	accept-ours = "!f() { git checkout --ours -- \"${@:-.}\"; git add -u \"${@:-.}\"; }; f"
 	accept-theirs = "!f() { git checkout --theirs -- \"${@:-.}\"; git add -u \"${@:-.}\"; }; f"
 	force-to-lf = "!f() { git filter-branch --tree-filter 'git ls-files -z | xargs -0 dos2unix' -- --all }; f"
 	sign-everything = "!f() { git filter-branch -f --commit-filter 'git commit-tree -S \"$@\"'-- --all; }; f"
 	mirror-author-date = "!f() { git filter-branch -f --env-filter 'export GIT_COMMITTER_DATE=\"$GIT_AUTHOR_DATE\"'; }; f"
-	sign-and-mirror = "!f() { git filter-branch -f --env-filter 'export GIT_COMMITTER_DATE=\"$GIT_AUTHOR_DATE\"' --commit-filter 'git commit-tree -S \"$@\"' HEAD; }; f"
-    sign-and-mirror-everything = "!f() { git filter-branch -f --env-filter 'export GIT_COMMITTER_DATE=\"$GIT_AUTHOR_DATE\"' --commit-filter 'git commit-tree -S \"$@\";' -- --all; }; f"
-    rewrite-history = "!f() { git rebase -i \"$1\" --rebase-merges=rebase-cousins --committer-date-is-author-date;  }; f"
-    rewrite-all-history = "!f() { git rebase -i --root --rebase-merges=rebase-cousins -S --committer-date-is-author-date;  }; f"
+	sign-and-mirror = "!f() { git filter-branch -f --env-filter 'export GIT_COMMITTER_DATE=\"$GIT_AUTHOR_DATE\"' --commit-filter 'git commit-tree -S \"$@\"' \"$1\"..HEAD; }; f"
+        sign-and-mirror-everything = "!f() { git filter-branch -f --env-filter 'export GIT_COMMITTER_DATE=\"$GIT_AUTHOR_DATE\"' --commit-filter 'git commit-tree -S \"$@\";' -- --all; }; f"
+        rewrite-history = "!f() { git rebase -i \"$1\" --rebase-merges=rebase-cousins --committer-date-is-author-date;  }; f"
+        rewrite-all-history = "!f() { git rebase -i --root --rebase-merges=rebase-cousins -S --committer-date-is-author-date;  }; f"
 [commit]
 	gpgsign = true
 [gpg]
